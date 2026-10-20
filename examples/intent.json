@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "productId": "spicy-burger",
+      "quantity": 1
+    },
+    {
+      "productId": "fries",
+      "quantity": 1
+    },
+    {
+      "productId": "cola",
+      "quantity": 1
+    }
+  ],
+  "budgetCents": 3500,
+  "people": 1,
+  "allowExtras": false,
+  "channel": "pickup"
+}

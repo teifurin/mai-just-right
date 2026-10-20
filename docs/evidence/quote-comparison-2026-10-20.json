@@ -1,0 +1,191 @@
+{
+  "note": "公开证据：只含核价请求结构与官方应付金额，不含 Token、账户券、地址或订单。价格为 2026-10-20 当时快照，随门店、时段和账户变化。",
+  "scope": {
+    "city": "深圳",
+    "area": "华强北",
+    "channel": "到店自取 orderType=1 beType=1",
+    "couponsApplied": false
+  },
+  "totalPath": [
+    "data",
+    "price"
+  ],
+  "unit": "fen",
+  "requests": [
+    {
+      "title": "单点：麦辣鸡腿汉堡 + 中薯条 + 可乐中杯",
+      "extraCount": null,
+      "arguments": {
+        "orderType": 1,
+        "beType": 1,
+        "storeCode": "<深圳华强北门店，已省略>",
+        "items": [
+          {
+            "productCode": "1440",
+            "quantity": 1
+          },
+          {
+            "productCode": "4810",
+            "quantity": 1
+          },
+          {
+            "productCode": "9900008751",
+            "quantity": 1,
+            "roundList": [
+              {
+                "round": "1",
+                "comboItemList": [
+                  {
+                    "code": "3050",
+                    "quantity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "麦辣鸡腿汉堡三件套（中薯条 + 可乐中杯）",
+      "extraCount": 0,
+      "arguments": {
+        "orderType": 1,
+        "beType": 1,
+        "storeCode": "<深圳华强北门店，已省略>",
+        "items": [
+          {
+            "productCode": "9900005456",
+            "quantity": 1,
+            "roundList": [
+              {
+                "round": "1",
+                "comboItemList": [
+                  {
+                    "code": "1440",
+                    "quantity": 1
+                  }
+                ]
+              },
+              {
+                "round": "2",
+                "comboItemList": [
+                  {
+                    "code": "4810",
+                    "quantity": 1
+                  }
+                ]
+              },
+              {
+                "round": "3",
+                "comboItemList": [
+                  {
+                    "code": "3050",
+                    "quantity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "麦辣鸡腿堡四件套（多一份麦乐鸡4块，麦金卡标签）",
+      "extraCount": 1,
+      "arguments": {
+        "orderType": 1,
+        "beType": 1,
+        "storeCode": "<深圳华强北门店，已省略>",
+        "items": [
+          {
+            "productCode": "9900000891",
+            "quantity": 1,
+            "roundList": [
+              {
+                "round": "1",
+                "comboItemList": [
+                  {
+                    "code": "1440",
+                    "quantity": 1
+                  }
+                ]
+              },
+              {
+                "round": "2",
+                "comboItemList": [
+                  {
+                    "code": "4810",
+                    "quantity": 1
+                  }
+                ]
+              },
+              {
+                "round": "3",
+                "comboItemList": [
+                  {
+                    "code": "515106",
+                    "quantity": 1
+                  }
+                ]
+              },
+              {
+                "round": "4",
+                "comboItemList": [
+                  {
+                    "code": "3050",
+                    "quantity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "result": {
+    "source": "live",
+    "currency": "CNY",
+    "baseline": {
+      "title": "单点：麦辣鸡腿汉堡 + 中薯条 + 可乐中杯",
+      "totalCents": 4600,
+      "extraCount": null,
+      "fetchedAt": "2026-10-20T05:36:31.665Z",
+      "source": "live",
+      "tool": "calculate-price"
+    },
+    "candidates": [
+      {
+        "title": "麦辣鸡腿汉堡三件套（中薯条 + 可乐中杯）",
+        "totalCents": 3350,
+        "extraCount": 0,
+        "fetchedAt": "2026-10-20T05:36:32.041Z",
+        "source": "live",
+        "tool": "calculate-price",
+        "savingCents": 1250
+      },
+      {
+        "title": "麦辣鸡腿堡四件套（多一份麦乐鸡4块，麦金卡标签）",
+        "totalCents": 5700,
+        "extraCount": 1,
+        "fetchedAt": "2026-10-20T05:36:32.602Z",
+        "source": "live",
+        "tool": "calculate-price",
+        "savingCents": -1100
+      }
+    ],
+    "best": {
+      "title": "麦辣鸡腿汉堡三件套（中薯条 + 可乐中杯）",
+      "totalCents": 3350,
+      "extraCount": 0,
+      "fetchedAt": "2026-10-20T05:36:32.041Z",
+      "source": "live",
+      "tool": "calculate-price",
+      "savingCents": 1250
+    },
+    "verifiedAt": "2026-10-20T05:36:32.602Z",
+    "comparisonScope": "逐个请求的官方应付总额；方案描述及多买件数由调用方提供，需核对同一门店、渠道、时段与原始需求。",
+    "note": "核价不锁定价格，也不创建订单；最终以官方结算为准。"
+  }
+}

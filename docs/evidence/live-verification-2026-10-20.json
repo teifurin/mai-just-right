@@ -1,0 +1,117 @@
+{
+  "application": "mai-just-right",
+  "version": "1.0.0",
+  "source": "live",
+  "endpoint": "https://mcp.mcd.cn",
+  "generatedAt": "2026-10-20T07:09:53.390Z",
+  "protocolVersion": "2025-06-18",
+  "liveBusinessCallSucceeded": true,
+  "outcome": "business-call-succeeded",
+  "calls": [
+    {
+      "method": "initialize",
+      "ok": true,
+      "durationMs": 1205
+    },
+    {
+      "method": "tools/list",
+      "ok": true,
+      "durationMs": 1754
+    },
+    {
+      "method": "tools/call",
+      "tool": "now-time-info",
+      "ok": true,
+      "durationMs": 278
+    },
+    {
+      "method": "tools/call",
+      "tool": "query-my-coupons",
+      "ok": true,
+      "durationMs": 316
+    },
+    {
+      "method": "tools/call",
+      "tool": "available-coupons",
+      "ok": true,
+      "durationMs": 278
+    },
+    {
+      "method": "tools/call",
+      "tool": "campaign-calendar",
+      "ok": true,
+      "durationMs": 354
+    },
+    {
+      "method": "tools/call",
+      "tool": "calculate-price",
+      "ok": true,
+      "durationMs": 350
+    },
+    {
+      "method": "tools/call",
+      "tool": "calculate-price",
+      "ok": true,
+      "durationMs": 306
+    },
+    {
+      "method": "tools/call",
+      "tool": "calculate-price",
+      "ok": true,
+      "durationMs": 335
+    }
+  ],
+  "includesAccountData": false,
+  "toolsDiscovered": 35,
+  "readOnlyTools": 16,
+  "successfulSnapshotQueries": [
+    "now-time-info",
+    "query-my-coupons",
+    "available-coupons",
+    "campaign-calendar"
+  ],
+  "quotes": {
+    "source": "live",
+    "currency": "CNY",
+    "baseline": {
+      "title": "baseline",
+      "totalCents": 4600,
+      "extraCount": null,
+      "fetchedAt": "2026-10-20T07:09:52.747Z",
+      "source": "live",
+      "tool": "calculate-price"
+    },
+    "candidates": [
+      {
+        "title": "candidate-1",
+        "totalCents": 3350,
+        "extraCount": 0,
+        "fetchedAt": "2026-10-20T07:09:53.054Z",
+        "source": "live",
+        "tool": "calculate-price",
+        "savingCents": 1250
+      },
+      {
+        "title": "candidate-2",
+        "totalCents": 5700,
+        "extraCount": 1,
+        "fetchedAt": "2026-10-20T07:09:53.389Z",
+        "source": "live",
+        "tool": "calculate-price",
+        "savingCents": -1100
+      }
+    ],
+    "best": {
+      "title": "candidate-1",
+      "totalCents": 3350,
+      "extraCount": 0,
+      "fetchedAt": "2026-10-20T07:09:53.054Z",
+      "source": "live",
+      "tool": "calculate-price",
+      "savingCents": 1250
+    },
+    "verifiedAt": "2026-10-20T07:09:53.389Z",
+    "comparisonScope": "逐个请求的官方应付总额；方案描述及多买件数由调用方提供，需核对同一门店、渠道、时段与原始需求。",
+    "note": "核价不锁定价格，也不创建订单；最终以官方结算为准。"
+  }
+}

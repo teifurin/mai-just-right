@@ -1,0 +1,44 @@
+{
+  "source": "live",
+  "currency": "CNY",
+  "baseline": {
+    "title": "单点：麦辣鸡腿汉堡 + 中薯条 + 可乐中杯",
+    "totalCents": 4600,
+    "extraCount": null,
+    "fetchedAt": "2026-10-20T07:07:59.840Z",
+    "source": "live",
+    "tool": "calculate-price"
+  },
+  "candidates": [
+    {
+      "title": "麦辣鸡腿汉堡三件套（中薯条 + 可乐中杯）",
+      "totalCents": 3350,
+      "extraCount": 0,
+      "fetchedAt": "2026-10-20T07:08:00.171Z",
+      "source": "live",
+      "tool": "calculate-price",
+      "savingCents": 1250
+    },
+    {
+      "title": "麦辣鸡腿堡四件套（多一份麦乐鸡4块，麦金卡标签）",
+      "totalCents": 5700,
+      "extraCount": 1,
+      "fetchedAt": "2026-10-20T07:08:00.539Z",
+      "source": "live",
+      "tool": "calculate-price",
+      "savingCents": -1100
+    }
+  ],
+  "best": {
+    "title": "麦辣鸡腿汉堡三件套（中薯条 + 可乐中杯）",
+    "totalCents": 3350,
+    "extraCount": 0,
+    "fetchedAt": "2026-10-20T07:08:00.171Z",
+    "source": "live",
+    "tool": "calculate-price",
+    "savingCents": 1250
+  },
+  "verifiedAt": "2026-10-20T07:08:00.539Z",
+  "comparisonScope": "逐个请求的官方应付总额；方案描述及多买件数由调用方提供，需核对同一门店、渠道、时段与原始需求。",
+  "note": "核价不锁定价格，也不创建订单；最终以官方结算为准。"
+}

@@ -1,0 +1,47 @@
+{
+  "application": "mai-just-right",
+  "version": "1.0.0",
+  "source": "live",
+  "endpoint": "https://mcp.mcd.cn",
+  "generatedAt": "2026-10-20T05:30:08.470Z",
+  "protocolVersion": "2025-06-18",
+  "liveBusinessCallSucceeded": true,
+  "outcome": "business-call-succeeded",
+  "calls": [
+    {
+      "method": "initialize",
+      "ok": true,
+      "durationMs": 989
+    },
+    {
+      "method": "tools/list",
+      "ok": true,
+      "durationMs": 921
+    },
+    {
+      "method": "tools/call",
+      "tool": "now-time-info",
+      "ok": true,
+      "durationMs": 328
+    },
+    {
+      "method": "tools/call",
+      "tool": "query-my-coupons",
+      "ok": true,
+      "durationMs": 300
+    },
+    {
+      "method": "tools/call",
+      "tool": "available-coupons",
+      "ok": true,
+      "durationMs": 625
+    },
+    {
+      "method": "tools/call",
+      "tool": "campaign-calendar",
+      "ok": true,
+      "durationMs": 1203
+    }
+  ],
+  "includesAccountData": false
+}

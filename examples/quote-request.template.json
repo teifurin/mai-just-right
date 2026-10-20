@@ -1,0 +1,15 @@
+{
+  "totalPath": ["REPLACE_WITH_ACTUAL_PAYABLE_TOTAL_FIELD"],
+  "unit": "yuan",
+  "baseline": {
+    "title": "原需求的同店同渠道基准方案",
+    "arguments": {}
+  },
+  "candidates": [
+    {
+      "title": "同样餐品使用可用优惠券",
+      "extraCount": 0,
+      "arguments": {}
+    }
+  ]
+}
