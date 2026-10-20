@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-20T08:17:04.047Z",
+  "generatedAt": "2026-10-20T08:59:02.681Z",
   "includesCredentials": false,
-  "knownSecretValuesChecked": 1,
+  "knownSecretValuesChecked": 0,
   "files": [
     {
       "path": ".env.example",
@@ -40,23 +40,28 @@
     },
     {
       "path": "MCP_INTEGRATION.md",
-      "sha256": "e19dda88b2d28c9e7591e33a0209a095ba843e7ea046c9d91bea5a2851838e9c",
-      "bytes": 9073
+      "sha256": "f6854e34f2d68322b68e4a45939fe7b1e4397d22c5e1cbe7e6d08b0f080f16c6",
+      "bytes": 9691
     },
     {
       "path": "README.md",
-      "sha256": "81310b0796754d34e922031cfaadc76b071b2c0976b9847317bc2511edcb9551",
-      "bytes": 8657
+      "sha256": "316cbb3a22c6a24cae302c358a3039ea844d63bf31d0f01972c2cc13d2687ab9",
+      "bytes": 9260
     },
     {
       "path": "SECURITY.md",
-      "sha256": "6131d781e66ae4e885f18a65afbbdf25c18b88c5f032b0469b01e5813de4ba0a",
-      "bytes": 2684
+      "sha256": "6f3eb70d784860bd4ae60a72bf0e164b078e91cfcd778d4cefd84585b57f6c20",
+      "bytes": 3227
+    },
+    {
+      "path": "app/LivePickup.tsx",
+      "sha256": "0fa38bca3b202a68eb5ac5341488a93911d746ad8c3ff2010fbbe489c29ea63b",
+      "bytes": 14478
     },
     {
       "path": "app/api/mcp/route.ts",
-      "sha256": "7bc74ce11c2471ed0b6338841db8aa03e22f06aa3bef7ea96b2b75e04f58c122",
-      "bytes": 420
+      "sha256": "62b8fe49d861d950f6ffd89e24bd365a034a6e85edc382daa7d3d7fe3d68f2b3",
+      "bytes": 486
     },
     {
       "path": "app/api/mcp/status/route.ts",
@@ -65,8 +70,8 @@
     },
     {
       "path": "app/globals.css",
-      "sha256": "ac65f9aeb27253e4ca4dc83ed48541197030dfa68ff1af490fc6ab07d9330608",
-      "bytes": 62255
+      "sha256": "19ab0dcd8e9f1ed9e259b75e5ac5b65e327462b64dc12b138fb5ea2e2eaa16b6",
+      "bytes": 65347
     },
     {
       "path": "app/layout.tsx",
@@ -74,9 +79,19 @@
       "bytes": 654
     },
     {
+      "path": "app/lib/demo-state.mjs",
+      "sha256": "cd732d5faa9a714cbed984d8752720e2a0def3cc82ba1975e2b668e6b09c392c",
+      "bytes": 3860
+    },
+    {
+      "path": "app/lib/live-state.mjs",
+      "sha256": "25685ed9142d8354f5272bc91aae5e84ab415b9ff1105d20203f78a732ec373f",
+      "bytes": 3832
+    },
+    {
       "path": "app/page.tsx",
-      "sha256": "6c5fb3c44f7983b2e2c17296ebd8329d2b7a528134d40f25655b31366795d01c",
-      "bytes": 49445
+      "sha256": "b3226bef308b7fc819cc34d21a07303f8da0bf94f70c869118b93590ad4076d6",
+      "bytes": 50442
     },
     {
       "path": "build/sites-vite-plugin.LICENSE",
@@ -105,13 +120,13 @@
     },
     {
       "path": "core/index.mjs",
-      "sha256": "68208308a380dc80998da1ad00b0563d9c1d2b214048106ce7d066dd25e44ced",
-      "bytes": 33233
+      "sha256": "182778a1fef13648f9df9914d035d010deb459f92ad3c4407df7bdd98966997b",
+      "bytes": 33860
     },
     {
       "path": "docs/ARCHITECTURE.md",
-      "sha256": "afd8ea328c812dd897292b25498294001720d98debd2dfdbfdd1318c590c77b1",
-      "bytes": 4754
+      "sha256": "e425bd69e470b7b0c3677462d6246f7473e093e1531c0126a6f36c47c5e23cfc",
+      "bytes": 5035
     },
     {
       "path": "docs/NOTICE.md",
@@ -119,14 +134,24 @@
       "bytes": 1739
     },
     {
+      "path": "docs/PICKUP_FLOW.md",
+      "sha256": "34b411bd77b62316bbc3f672447b3064d19a904c4fdcb96369bca9e89329a414",
+      "bytes": 6709
+    },
+    {
       "path": "docs/SUBMISSION.md",
       "sha256": "8b6099fd55b89f36512c03e4581ce4d50211f82767288f2dfd23575e005fd4e8",
       "bytes": 2643
     },
     {
+      "path": "docs/UI_ACCEPTANCE.md",
+      "sha256": "13543ea83fabfd20ad1f13456168ee25c08b69799a4f1f28b5a19468a81e3e84",
+      "bytes": 3563
+    },
+    {
       "path": "docs/VALIDATION.md",
-      "sha256": "4fb1ecf5a229e8c93a8ac432868c6c09200269c876defcd45b17025e78be28d1",
-      "bytes": 7640
+      "sha256": "d23b8fd4f44a9ced2b2a46a4c5132095d4029a242de7e2042340b312a7e6d8f2",
+      "bytes": 10404
     },
     {
       "path": "docs/evidence/live-verification-2026-10-20.json",
@@ -295,13 +320,18 @@
     },
     {
       "path": "server/http-handler.mjs",
-      "sha256": "6e238d93f55397f3327f722076b0eafbc6a73e7e3e6990a4a65813ebd1399a34",
-      "bytes": 4789
+      "sha256": "3f42770b8426e5076df21e16cc6719cdab1a81880ddb5d501c84cf4dad3a09c2",
+      "bytes": 5334
     },
     {
       "path": "server/mcp-client.mjs",
-      "sha256": "92baae5d4cf942e38423e0c216c3b82e165d504c98172f2ee4dbf5a9e56d536b",
-      "bytes": 14230
+      "sha256": "677bc31788fc00d68eaba6c50530dbd55a0738a046cfe0334920e1ca36bc877b",
+      "bytes": 15693
+    },
+    {
+      "path": "server/pickup-flow.mjs",
+      "sha256": "cb9a3c7fd4bd444e9508ce022cec41b3edfc7faa8052e2f3b85260c0c3440e77",
+      "bytes": 16585
     },
     {
       "path": "server/quote-comparison.mjs",
@@ -319,24 +349,49 @@
       "bytes": 7636
     },
     {
+      "path": "tests/browser/playwright.config.mjs",
+      "sha256": "bdda1b50a053ff7d8f916ee5e378787011e549a1323b46d366cff8df93e16818",
+      "bytes": 772
+    },
+    {
+      "path": "tests/browser/workflow.spec.mjs",
+      "sha256": "b8c878105b0df33293430b2e96bee52f25ab9543ac10347ee2ff41e50ab082c1",
+      "bytes": 5550
+    },
+    {
       "path": "tests/dependency-security.test.mjs",
       "sha256": "dba513ff2b3c89d326e0810285518f6b644c602f6e262d0ded873cef10bf1200",
       "bytes": 2118
     },
     {
       "path": "tests/engine.test.mjs",
-      "sha256": "31e8f31e4155fcf73d5e2001199755abcb349f56453943978868b50aa71f6faa",
-      "bytes": 18194
+      "sha256": "fef387b73e0435118d0fa8f0ba34e3b56e04754407988e8960d9fd934a94a3e1",
+      "bytes": 19210
+    },
+    {
+      "path": "tests/live-ui-state.test.mjs",
+      "sha256": "3bd95c37eed501ee4a1874e87cbe3cf6c4764c0c623a6eb8dda4bc8746c13399",
+      "bytes": 3100
     },
     {
       "path": "tests/mcp.test.mjs",
-      "sha256": "cefc3125ee69747fc696f60bb4e29524be2de941c060857856241d2555a41918",
-      "bytes": 18619
+      "sha256": "85790b8acd58184db2871213b08a22952988bcbbadda33e335defae1acddf76c",
+      "bytes": 22357
+    },
+    {
+      "path": "tests/pickup.test.mjs",
+      "sha256": "a613a30a17374086b3afc31ce416e57e4c64d53ad8ffc70be20b061967bfed09",
+      "bytes": 11112
     },
     {
       "path": "tests/schema.test.mjs",
       "sha256": "df92399523bd972602396e5db61f96c48f75095db43296fb99c2d29a20e0ba3e",
       "bytes": 3944
+    },
+    {
+      "path": "tests/web-state.test.mjs",
+      "sha256": "545d154488122d03e84a5168b94aacd60842a7aa542c5d5a9e36482cda0b355b",
+      "bytes": 3581
     },
     {
       "path": "tsconfig.json",
