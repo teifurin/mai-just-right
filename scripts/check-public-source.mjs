@@ -15,7 +15,8 @@ const known = ['MCD_MCP_TOKEN', 'GITHUB_TOKEN', 'GH_TOKEN', 'OPENAI_API_KEY']
 for (const file of files) {
   const forbidden = /(^|\/)(?:\.env(?:\..*)?|\.dev\.vars(?:\..*)?|PRIVATE_[^/]*|\.aws|\.ssh|node_modules|work|outputs|\.sites-runtime|\.wrangler)(\/|$)/i.test(file)
     || /\.(?:pem|key|p12|pfx)$/i.test(file)
-    || file.startsWith('evidence/');
+    || file.startsWith('evidence/')
+    || /(^|\/)[^/]*_debug_delivery[^/]*\.zip$/i.test(file);
   if (forbidden && file !== '.env.example') {
     findings.push({ path: file, rule: 'private-or-generated-file' });
     continue; // Never open a tracked .env or credential file, even by accident.

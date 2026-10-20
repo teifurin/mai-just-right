@@ -33,10 +33,23 @@ test('performs initialize + notification + discovery before a business call and 
   assert.equal(requests[3].headers['Mcp-Session-Id'], 'test-session');
   assert.equal(requests[3].headers['MCP-Protocol-Version'], '2025-06-18');
   assert.equal(requests[3].headers.Accept, 'application/json, text/event-stream');
-  assert.equal(requests[3].redirect, 'error');
+  assert.equal(requests[3].redirect, 'manual');
   assert.equal(JSON.stringify(client).includes(TEST_TOKEN), false);
   await client.close();
   assert.equal(requests.at(-1).method, 'DELETE');
+  assert.equal(requests.at(-1).redirect, 'manual');
+});
+
+test('redirects stop at the official endpoint without forwarding credentials in Workers or Node', async () => {
+  const { client, requests } = fakeServer({ handle: (_body, init) => {
+    // Emulate Workers' supported redirect modes: "error" fails before networking.
+    if (!['follow', 'manual'].includes(init.redirect)) throw new TypeError('Invalid redirect mode');
+    assert.equal(init.redirect, 'manual');
+    return new Response(TEST_TOKEN, { status: 302, headers: { Location: 'https://untrusted.invalid/collect' } });
+  } });
+  await assert.rejects(() => client.listTools(), error => error.code === 'UPSTREAM_REDIRECT' && !error.message.includes(TEST_TOKEN));
+  assert.equal(requests.length, 1);
+  assert.equal(client.audit.at(-1).ok, false);
 });
 
 test('parses chunked SSE, CRLF, multibyte data, progress notifications and an open stream', async () => {

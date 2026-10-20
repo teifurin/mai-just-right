@@ -59,7 +59,7 @@ test('malformed persisted history cannot crash restored rendering', async ({ pag
 
 test('live missing-profile failure never presents synthetic official results', async ({ page }, testInfo) => {
   await page.getByRole('button', { name: '真实自取核价', exact: true }).click();
-  await page.getByLabel('城市或门店关键词').fill('合成查询');
+  await page.getByLabel('门店关键词').fill('合成查询');
   await page.getByRole('button', { name: '查询门店', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('尚未配置');
   await expect(page.locator('.live-results')).toHaveCount(0);

@@ -1,0 +1,18 @@
+{
+  "testedAt": "2026-10-20T09:32:40.691Z",
+  "runtime": "production-worker",
+  "realOfficialCalls": true,
+  "viewport": {
+    "width": 360,
+    "height": 800
+  },
+  "mobileEmulation": true,
+  "touchActions": true,
+  "physicalDevice": false,
+  "passed": true,
+  "horizontalOverflow": false,
+  "pageErrors": [],
+  "quotedCarts": 2,
+  "baselineCents": 4600,
+  "bestCents": 3350
+}

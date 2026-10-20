@@ -57,6 +57,7 @@ next-env.d.ts
 !.env.example
 /evidence/
 /PRIVATE_*
+/*_debug_delivery*.zip
 *.tsbuildinfo
 
 # Other local credentials and configuration must never enter a source release.

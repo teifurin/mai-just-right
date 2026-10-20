@@ -84,7 +84,7 @@ Web 服务提供同一比较能力：向 `/api/mcp` 发送 POST JSON，提交 `a
 
 ## 有界网页真实流程
 
-新增 `pickup-stores`、`pickup-catalog`、`pickup-recommend` 三个受现有所有者鉴权保护的动作。它们使用服务端明确审核的映射，不是任意官方响应的通用适配器。运行时逐次检查 Schema 和商品/组成断言，重新读取所选门店菜单与优惠，最多比较一个基准和五个候选。所有候选金额都由官方核价得到，列表价不参与排名。缺少映射、关键查询失败、金额缺失或范围过大时停止，不回退到演示。详情及尚未完成的真实验收见 [PICKUP_FLOW.md](docs/PICKUP_FLOW.md)。
+`pickup-stores`、`pickup-catalog`、`pickup-recommend` 三个动作受现有所有者鉴权保护。它们使用服务端明确审核的映射，不是任意官方响应的通用适配器。运行时逐次检查 Schema 和商品/组成断言，重新读取所选门店菜单与优惠，最多比较一个基准和五个候选。所有候选金额都由官方核价得到，列表价不参与排名。缺少映射、关键查询失败、金额缺失或范围过大时停止，不回退到演示。已完成一个门店、三种餐品和一个套餐的真实网页验收，具体范围见 [PICKUP_FLOW.md](docs/PICKUP_FLOW.md)。
 
 ## 调用边界
 
@@ -100,7 +100,7 @@ Agent Skill 使用的是 MCP 客户端环境中用户自己的凭证；Web 服�
 
 ## 真实联调记录（2026-10-20）
 
-均通过本仓库 CLI 与官方 `https://mcp.mcd.cn` 完成，协议版本 `2025-06-18`。
+CLI 历史查询与本次生产 Worker 网页验收均连接官方 `https://mcp.mcd.cn`，协议版本 `2025-06-18`。
 
 | 步骤 | 工具 | 结果 |
 | --- | --- | --- |
@@ -108,13 +108,17 @@ Agent Skill 使用的是 MCP 客户端环境中用户自己的凭证；Web 服�
 | 只读快照 | `now-time-info`、`query-my-coupons`、`available-coupons`、`campaign-calendar` | 4 个均成功（账户返回内容不公开） |
 | 门店 | `query-nearby-stores`（`beType=1, searchType=2`，城市 + 关键词） | 成功，取得所选门店；门店标识未公开 |
 | 菜单 | `query-meals`、`query-meal-detail` | 成功，取得单品、套餐编码及各 round 可选项 |
-| 核价比较 | `calculate-price` × 3（经 `mcp-quote`） | 成功：单点 ¥46.00；三件套 ¥33.50（少付 ¥12.50，无多余餐品）；四件套 ¥57.00（多付 ¥11.00，多一份麦乐鸡） |
+| 网页同规格比较 | `calculate-price`，单点基准 + 三件套 | 成功：汉堡 + 中薯 + 明确中杯可乐，单点 ¥46.00；三件套 ¥33.50，少付 ¥12.50，无额外餐品 |
+| 网页分支 | 严格按需、允许额外餐品、预算不足 | 成功；只需汉堡时保留 ¥22.50 单点，不把多买两份且多付 ¥11 的套餐推荐为省钱 |
 
 实测得到的接入要点（以当时 Schema 为准，后续仍应以 `tools/list` 为准）：
 
 - `calculate-price` 的 `structuredContent.data.price` 为应付金额，单位**分**；因此核价请求使用 `"totalPath": ["data", "price"]`、`"unit": "fen"`。
 - 套餐与带规格单品（如可乐）通过 `items[].roundList[]` 指定，`round` 为 `query-meal-detail` 返回的 round `id` 字符串（如 `"1"`），`comboItemList[].code` 为所选子项编码。
+- 默认可乐详情选中小杯。比较中杯时必须使用菜单主商品编码，加明确的中杯 `roundList`；子项编码不能直接当作可单点的主商品。请求被接受或返回金额，并不证明规格映射正确。
 - 到店自取（`orderType=1, beType=1`）不传 `beCode`。
 - 菜单列表的 `currentPrice` 可能是带条件的展示价（实测四件套列表 ¥28、官方核价 ¥57），不能替代 `calculate-price`。
 
-公开证据：[mcp-check-2026-10-20.json](docs/evidence/mcp-check-2026-10-20.json)（仅调用元数据）与 [quote-comparison-2026-10-20.json](docs/evidence/quote-comparison-2026-10-20.json)（核价请求结构与官方金额，门店编码已省略）。
+公开证据：[真实网页核价](docs/evidence/pickup-browser-2026-10-20.json)、[手机尺寸触摸模拟](docs/evidence/pickup-mobile-2026-10-20.json)及[早期工具发现元数据](docs/evidence/mcp-check-2026-10-20.json)。早期三组 CLI 核价记录只证明当时请求返回了金额，没有显式核对单点可乐中杯选项；它们不再作为同规格比较依据。
+
+HTTP 客户端使用 `redirect: manual` 并拒绝 3xx，兼容 Node 与 Workers，同时禁止向重定向目的地转发账户凭据。

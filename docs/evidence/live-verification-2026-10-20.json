@@ -113,5 +113,12 @@
     "verifiedAt": "2026-10-20T07:09:53.389Z",
     "comparisonScope": "逐个请求的官方应付总额；方案描述及多买件数由调用方提供，需核对同一门店、渠道、时段与原始需求。",
     "note": "核价不锁定价格，也不创建订单；最终以官方结算为准。"
+  },
+  "reviewStatus": {
+    "reviewedAt": "2026-10-20",
+    "scope": "historical-api-response-only",
+    "sameSpecificationComparisonVerified": false,
+    "note": "旧请求未显式核对单点可乐中杯规格，标题不证明实际规格；原金额与时间保留，仅作历史接口记录。",
+    "supersededBy": "pickup-browser-2026-10-20.json"
   }
 }

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-20T08:59:02.681Z",
+  "generatedAt": "2026-10-20T09:40:28.824Z",
   "includesCredentials": false,
-  "knownSecretValuesChecked": 0,
+  "knownSecretValuesChecked": 1,
   "files": [
     {
       "path": ".env.example",
-      "sha256": "96f232a6ee4d81fc085debf2e17d52500d72017040bfe44e12c1f5147be756f2",
-      "bytes": 680
+      "sha256": "6a4f5bba40b7460275912c30837b2295ae998a4066a52d9edbb366412dbd511f",
+      "bytes": 861
     },
     {
       "path": ".gitattributes",
@@ -20,8 +20,8 @@
     },
     {
       "path": ".gitignore",
-      "sha256": "cd7386c85ce31d696d7a74d5ae6b5ef17f62f4727e0c86327b5fcd4ff92cba20",
-      "bytes": 980
+      "sha256": "3dec0706c12331ae656992d39493da8f6b8a6971487a32b8fbfc4539cb7fff7c",
+      "bytes": 1003
     },
     {
       "path": ".npmrc",
@@ -40,13 +40,13 @@
     },
     {
       "path": "MCP_INTEGRATION.md",
-      "sha256": "f6854e34f2d68322b68e4a45939fe7b1e4397d22c5e1cbe7e6d08b0f080f16c6",
-      "bytes": 9691
+      "sha256": "34ab89945e9e088657ef4386686164b125123b58b21f7ffaf88f88f6b2aa1498",
+      "bytes": 10425
     },
     {
       "path": "README.md",
-      "sha256": "316cbb3a22c6a24cae302c358a3039ea844d63bf31d0f01972c2cc13d2687ab9",
-      "bytes": 9260
+      "sha256": "30c99177911fd9c137f2589405dbc529a2f9050bce98144e024fe41121d93eb0",
+      "bytes": 9480
     },
     {
       "path": "SECURITY.md",
@@ -55,8 +55,8 @@
     },
     {
       "path": "app/LivePickup.tsx",
-      "sha256": "0fa38bca3b202a68eb5ac5341488a93911d746ad8c3ff2010fbbe489c29ea63b",
-      "bytes": 14478
+      "sha256": "09b5c3df61684b02d68de799dc2cc39b4143ebb8759867438e19e972397662eb",
+      "bytes": 14618
     },
     {
       "path": "app/api/mcp/route.ts",
@@ -125,8 +125,8 @@
     },
     {
       "path": "docs/ARCHITECTURE.md",
-      "sha256": "e425bd69e470b7b0c3677462d6246f7473e093e1531c0126a6f36c47c5e23cfc",
-      "bytes": 5035
+      "sha256": "038d64a462313553d5f0398da52cb41569435fd64060e654cf87b908d2927b63",
+      "bytes": 5080
     },
     {
       "path": "docs/NOTICE.md",
@@ -135,8 +135,8 @@
     },
     {
       "path": "docs/PICKUP_FLOW.md",
-      "sha256": "34b411bd77b62316bbc3f672447b3064d19a904c4fdcb96369bca9e89329a414",
-      "bytes": 6709
+      "sha256": "a37edc58c257ab151b1369f548287cf461df3efd74d63ef25f320cd8d25644b3",
+      "bytes": 7744
     },
     {
       "path": "docs/SUBMISSION.md",
@@ -150,13 +150,13 @@
     },
     {
       "path": "docs/VALIDATION.md",
-      "sha256": "d23b8fd4f44a9ced2b2a46a4c5132095d4029a242de7e2042340b312a7e6d8f2",
-      "bytes": 10404
+      "sha256": "590ae4ac652e815d072d9ce11f3dee372b01189382dbaa583afa39323783c345",
+      "bytes": 5715
     },
     {
       "path": "docs/evidence/live-verification-2026-10-20.json",
-      "sha256": "da1449d6c13ff32521763b271e45ec307ab2d8e9fcb76985daf75f9aa4bb136b",
-      "bytes": 2815
+      "sha256": "2abf56809ee2f77dfa2756478e0c1369bb3c7fa8f4ad11d6cf8df4e06a56f309",
+      "bytes": 3171
     },
     {
       "path": "docs/evidence/mcp-check-2026-10-20.json",
@@ -169,14 +169,24 @@
       "bytes": 971
     },
     {
+      "path": "docs/evidence/pickup-browser-2026-10-20.json",
+      "sha256": "ffd87b3a1053c43247db840fe446b04227ef9bbefaab4a9ea008e6a88ac8036b",
+      "bytes": 2895
+    },
+    {
+      "path": "docs/evidence/pickup-mobile-2026-10-20.json",
+      "sha256": "bf9aa086abb8f1964b0f37377adb535c9bb307d6b9c9471ba3973d6fa2524a01",
+      "bytes": 377
+    },
+    {
       "path": "docs/evidence/quote-comparison-2026-10-20.json",
-      "sha256": "e9bb7e470ff3527ef53e2b689c0ae2a37c1e2a3d2d4a62b0e55860ec1f20c0f9",
-      "bytes": 5067
+      "sha256": "8be93c61a997d407e4ea0efa4233cc2793d65e4984b69e74f19463245be10544",
+      "bytes": 5423
     },
     {
       "path": "docs/evidence/quote-recheck-2026-10-20.json",
-      "sha256": "ba12ccd6462b93d69e957accf81a49e876aa49c488570e14a51084a0ac662fb5",
-      "bytes": 1410
+      "sha256": "58779d3c226cd590f6ef1789140eaa6c385da6def3d1e7a15820fd5219cbc252",
+      "bytes": 1766
     },
     {
       "path": "docs/images/mai-just-right-banner.png",
@@ -230,7 +240,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "989404570dfd0894f5ae474b74809b8cd04fee2b0f83539cac9bc311623cc464",
+      "sha256": "af41dc8934b22eb8c8324fd2edaee53128f944ae5b92fc9dc014df6b30b1555e",
       "bytes": 2196
     },
     {
@@ -265,8 +275,8 @@
     },
     {
       "path": "scripts/check-public-source.mjs",
-      "sha256": "ff78f9becbbf883c47ae8c86d21f037a97685aff8d6b80772a8a5022288d432f",
-      "bytes": 2111
+      "sha256": "383b2f86f565106a1e2ac0db8c6d89fb3a6dd1254f2eef749ebe07021452e603",
+      "bytes": 2170
     },
     {
       "path": "scripts/execution-profile.mjs",
@@ -325,8 +335,8 @@
     },
     {
       "path": "server/mcp-client.mjs",
-      "sha256": "677bc31788fc00d68eaba6c50530dbd55a0738a046cfe0334920e1ca36bc877b",
-      "bytes": 15693
+      "sha256": "10eed088b7d7faa513e9457685b3a733b0303b6a99dfacf1bf6c6c543e8afd8d",
+      "bytes": 16024
     },
     {
       "path": "server/pickup-flow.mjs",
@@ -355,8 +365,8 @@
     },
     {
       "path": "tests/browser/workflow.spec.mjs",
-      "sha256": "b8c878105b0df33293430b2e96bee52f25ab9543ac10347ee2ff41e50ab082c1",
-      "bytes": 5550
+      "sha256": "08bbb090ae57c5857c03ec120f54bf5f1a3bba627ad8fe051eb534407bbac588",
+      "bytes": 5541
     },
     {
       "path": "tests/dependency-security.test.mjs",
@@ -375,8 +385,8 @@
     },
     {
       "path": "tests/mcp.test.mjs",
-      "sha256": "85790b8acd58184db2871213b08a22952988bcbbadda33e335defae1acddf76c",
-      "bytes": 22357
+      "sha256": "628b9cf6258d53dac94b10cda5b5b0a5ddd57b18919a1a44ecf7cb9c8f76e6cb",
+      "bytes": 23164
     },
     {
       "path": "tests/pickup.test.mjs",

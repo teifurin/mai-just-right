@@ -66,7 +66,7 @@ export default function LivePickup() {
     }
   }
   async function findStores() {
-    if (!search.trim()) { setError("请输入城市或门店关键词。"); return; }
+    if (!search.trim()) { setError("请输入门店关键词。"); return; }
     setStores([]); setStoreId(""); setCatalog(null); setDemand([]); setOfferIds([]);
     const data = await request<{ source: "live"; stores: Store[] }>("pickup-stores", { search: search.trim() });
     if (data) {
@@ -81,7 +81,8 @@ export default function LivePickup() {
     const data = await request<Catalog>("pickup-catalog", { storeId: id });
     if (data) {
       if (!isLiveCatalog(data, id)) { setError("菜单返回结构或门店不一致，未使用这批数据。"); return; }
-      setCatalog(data); setOfferIds(data.offers.map((offer: { id: string }) => offer.id));
+      setCatalog({ ...data, store: stores.find((store) => store.id === id) ?? data.store });
+      setOfferIds(data.offers.map((offer: { id: string }) => offer.id));
     }
   }
   function quantity(productId: string, value: number) {
@@ -94,7 +95,7 @@ export default function LivePickup() {
     const data = await request<Recommendation>("pickup-recommend", { storeId, demand, budgetCents, allowExtras, offerIds });
     if (data) {
       if (!isLiveRecommendation(data, storeId, budgetCents, demand, allowExtras)) { setError("官方核价结果不完整，未显示推荐。"); return; }
-      setResult(data);
+      setResult({ ...data, store: catalog?.store ?? data.store });
     }
   }
   const itemLabel = (item: Item) => `${item.name ?? catalog?.products.find((product) => product.id === item.productId)?.name ?? "餐品"} ×${item.quantity}`;
@@ -104,9 +105,9 @@ export default function LivePickup() {
     <div className="demo-banner live-boundary"><ShieldCheck size={19} /><p><strong>真实流程与演示完全分开。</strong> 未配置令牌或实际数据映射时会明确停止；不会回退演示价格。此页数据仅保留于当前页面内存，不存入历史、不自动领取优惠或下单。</p></div>
     <section className="live-workflow planner-card" aria-label="真实到店自取流程">
       <div className="section-heading"><span className="step-number">01</span><h2>选定门店与渠道</h2></div>
-      <form className="live-store-search" onSubmit={(event) => { event.preventDefault(); void findStores(); }}><label htmlFor="live-store-search">城市或门店关键词</label><div><input id="live-store-search" value={search} disabled={!!busy} onChange={(event) => { setSearch(event.target.value); setStores([]); setStoreId(""); setCatalog(null); setDemand([]); setResult(null); }} placeholder="输入门店查询关键词" maxLength={100} /><button className="primary-small" disabled={!!busy || !search.trim()} type="submit">{busy === "pickup-stores" ? <Loader2 size={16} className="spin" /> : <Search size={16} />}查询门店</button></div></form>
+      <form className="live-store-search" onSubmit={(event) => { event.preventDefault(); void findStores(); }}><label htmlFor="live-store-search">门店关键词</label><div><input id="live-store-search" value={search} disabled={!!busy} onChange={(event) => { setSearch(event.target.value); setStores([]); setStoreId(""); setCatalog(null); setDemand([]); setResult(null); }} placeholder="输入门店查询关键词" maxLength={100} /><button className="primary-small" disabled={!!busy || !search.trim()} type="submit">{busy === "pickup-stores" ? <Loader2 size={16} className="spin" /> : <Search size={16} />}查询门店</button></div></form>
       {stores.length > 0 && <div className="live-field"><label htmlFor="live-store-select">真实返回的门店</label><select id="live-store-select" disabled={!!busy} value={storeId} onChange={(event) => void loadCatalog(event.target.value)}><option value="">请选择一家门店</option>{stores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}</select></div>}
-      <p className="live-caption">渠道固定：到店自取。门店编码、餐品编码、金额单位与规则只取服务端核对过的实际数据。</p>
+      <p className="live-caption">搜索城市由运行者预先配置，渠道固定为到店自取。门店编码、餐品编码、金额单位与规则只取服务端核对过的实际数据。</p>
       {busy === "pickup-catalog" && <p role="status"><Loader2 className="spin" size={16} />正在读取当前门店菜单与适用优惠…</p>}
       {catalog && <>
         <div className="section-heading preference-heading"><span className="step-number">02</span><h2>确认真实需求与比较范围</h2></div>

@@ -1,0 +1,136 @@
+{
+  "testedAt": "2026-10-20T09:31:25.346Z",
+  "productionWorker": true,
+  "realOfficialCalls": true,
+  "mockedAccountResponses": false,
+  "viewports": [
+    1440,
+    390,
+    360
+  ],
+  "sameProductCodesAndQuantities": true,
+  "accountDataPersistedToLocalStorage": false,
+  "pageErrors": [],
+  "calls": [
+    {
+      "action": "pickup-stores",
+      "status": 200
+    },
+    {
+      "action": "pickup-catalog",
+      "status": 200
+    },
+    {
+      "action": "pickup-recommend",
+      "status": 200
+    },
+    {
+      "action": "pickup-recommend",
+      "status": 200
+    },
+    {
+      "action": "pickup-recommend",
+      "status": 200
+    },
+    {
+      "action": "pickup-recommend",
+      "status": 200
+    }
+  ],
+  "results": [
+    {
+      "case": "same-specification-three-items",
+      "budgetCents": 6000,
+      "withinBudget": true,
+      "demand": [
+        {
+          "productId": "spicy-burger",
+          "quantity": 1
+        },
+        {
+          "productId": "fries-medium",
+          "quantity": 1
+        },
+        {
+          "productId": "cola-medium",
+          "quantity": 1
+        }
+      ],
+      "baselineCents": 4600,
+      "candidates": [
+        {
+          "title": "麦辣鸡腿汉堡三件套",
+          "totalCents": 3350,
+          "extraCount": 0
+        }
+      ],
+      "bestCents": 3350,
+      "bestExtraCount": 0,
+      "quotedCarts": 2,
+      "verifiedAt": "2026-10-20T09:31:12.842Z"
+    },
+    {
+      "case": "burger-only-extras-forbidden",
+      "budgetCents": 6000,
+      "withinBudget": true,
+      "demand": [
+        {
+          "productId": "spicy-burger",
+          "quantity": 1
+        }
+      ],
+      "baselineCents": 2250,
+      "candidates": [],
+      "bestCents": 2250,
+      "bestExtraCount": 0,
+      "quotedCarts": 1,
+      "verifiedAt": "2026-10-20T09:31:17.923Z"
+    },
+    {
+      "case": "burger-only-extras-allowed",
+      "budgetCents": 6000,
+      "withinBudget": true,
+      "demand": [
+        {
+          "productId": "spicy-burger",
+          "quantity": 1
+        }
+      ],
+      "baselineCents": 2250,
+      "candidates": [
+        {
+          "title": "麦辣鸡腿汉堡三件套",
+          "totalCents": 3350,
+          "extraCount": 2
+        }
+      ],
+      "bestCents": 2250,
+      "bestExtraCount": 0,
+      "quotedCarts": 2,
+      "verifiedAt": "2026-10-20T09:31:21.632Z"
+    },
+    {
+      "case": "budget-insufficient",
+      "budgetCents": 100,
+      "withinBudget": false,
+      "demand": [
+        {
+          "productId": "spicy-burger",
+          "quantity": 1
+        }
+      ],
+      "baselineCents": 2250,
+      "candidates": [
+        {
+          "title": "麦辣鸡腿汉堡三件套",
+          "totalCents": 3350,
+          "extraCount": 2
+        }
+      ],
+      "bestCents": 2250,
+      "bestExtraCount": 0,
+      "quotedCarts": 2,
+      "verifiedAt": "2026-10-20T09:31:25.293Z"
+    }
+  ]
+}

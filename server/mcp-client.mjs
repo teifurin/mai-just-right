@@ -81,7 +81,7 @@ export class McdClient {
     const headers = { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream', Authorization: `Bearer ${this.#token}`, 'MCP-Protocol-Version': this.protocolVersion };
     if (this.sessionId) headers['Mcp-Session-Id'] = this.sessionId;
     const body = { jsonrpc: '2.0', id: message.id, ...(message.method === 'ping' ? { result: {} } : { error: { code: -32601, message: 'Client capability is not available.' } }) };
-    const response = await this.#fetch(MCD_ENDPOINT, { method: 'POST', headers, body: JSON.stringify(body), signal: AbortSignal.timeout(5000), redirect: 'error' });
+    const response = await this.#fetch(MCD_ENDPOINT, { method: 'POST', headers, body: JSON.stringify(body), signal: AbortSignal.timeout(5000), redirect: 'manual' });
     await response.body?.cancel().catch(() => {});
     if (!response.ok) throw new McpError('SERVER_REQUEST_RESPONSE_FAILED', '无法回复 MCP 服务端的协议请求。');
   }
@@ -95,9 +95,12 @@ export class McdClient {
       const headers = { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream', Authorization: `Bearer ${this.#token}` };
       if (this.sessionId) headers['Mcp-Session-Id'] = this.sessionId;
       if (this.initialized || method === 'notifications/initialized') headers['MCP-Protocol-Version'] = this.protocolVersion;
-      const response = await this.#fetch(MCD_ENDPOINT, { method: 'POST', headers, body: JSON.stringify({ jsonrpc: '2.0', ...(id === undefined ? {} : { id }), method, ...(params === undefined ? {} : { params }) }), signal: controller.signal, redirect: 'error' });
+      // Workers supports manual/follow only. Never follow a redirect carrying
+      // account credentials; reject it explicitly in every runtime.
+      const response = await this.#fetch(MCD_ENDPOINT, { method: 'POST', headers, body: JSON.stringify({ jsonrpc: '2.0', ...(id === undefined ? {} : { id }), method, ...(params === undefined ? {} : { params }) }), signal: controller.signal, redirect: 'manual' });
       if (!response.ok) {
         await response.body?.cancel().catch(() => {});
+        if (response.status >= 300 && response.status < 400) throw new McpError('UPSTREAM_REDIRECT', '官方 MCP 返回了重定向，已停止请求，未转发账户凭据。');
         if (response.status === 401 || response.status === 403) throw new McpError('AUTH_FAILED', 'MCP Token 无效、过期或没有访问权限，请在官方控制台核对。', 401);
         if (response.status === 429) throw new McpError('RATE_LIMITED', '官方 MCP 请求过于频繁，请稍后重试。', 429);
         if (response.status === 404 && this.sessionId) throw new McpError('SESSION_EXPIRED', 'MCP 会话已过期。');
@@ -229,7 +232,7 @@ export class McdClient {
   async close() {
     if (!this.sessionId) return;
     try {
-      const response = await this.#fetch(MCD_ENDPOINT, { method: 'DELETE', headers: { Authorization: `Bearer ${this.#token}`, 'Mcp-Session-Id': this.sessionId, 'MCP-Protocol-Version': this.protocolVersion }, signal: AbortSignal.timeout(2000), redirect: 'error' });
+      const response = await this.#fetch(MCD_ENDPOINT, { method: 'DELETE', headers: { Authorization: `Bearer ${this.#token}`, 'Mcp-Session-Id': this.sessionId, 'MCP-Protocol-Version': this.protocolVersion }, signal: AbortSignal.timeout(2000), redirect: 'manual' });
       await response.body?.cancel().catch(() => {});
     } catch { /* Some valid MCP servers do not implement DELETE. */ }
     this.sessionId = undefined; this.initialized = false; this.tools = null;
