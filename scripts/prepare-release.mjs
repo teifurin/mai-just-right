@@ -13,18 +13,22 @@ const workRoot = path.join(root, 'work') + path.sep;
 if (!destination.startsWith(workRoot)) throw new Error('Release output must be inside this project/work/.');
 if (existsSync(destination) && readdirSync(destination).length) throw new Error('Use an empty release output directory; existing files are never deleted.');
 const rootFiles = [
-  'README.md', 'CONTEST_DECLARATION.md', 'MCP_INTEGRATION.md', 'mcp-config.example.json', 'LICENSE',
+  'README.md', 'CONTEST_DECLARATION.md', 'MCP_INTEGRATION.md', 'mcp-config.example.json', 'LICENSE', 'SECURITY.md',
   '.env.example', '.gitignore', '.gitattributes', '.npmrc', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml',
   'tsconfig.json', 'next.config.ts', 'vite.config.ts', 'postcss.config.mjs',
-  'eslint.config.mjs', 'components.json', 'cloudflare-env.d.ts', 'drizzle.config.ts',
+  'eslint.config.mjs', 'cloudflare-env.d.ts',
 ];
-const directories = ['app', 'build', 'components', 'core', 'db', 'docs', 'drizzle', 'examples', 'hooks', 'lib', 'public', 'scripts', 'server', 'skills', 'tests', 'vendor', '.github'];
+const directories = ['app', 'build', 'core', 'docs', 'examples', 'patches', 'public', 'scripts', 'server', 'skills', 'tests', '.github'];
 const files = [...rootFiles];
 function walk(relative) {
   for (const entry of readdirSync(path.join(root, relative), { withFileTypes: true })) {
     const name = `${relative}/${entry.name}`;
     if (entry.isSymbolicLink()) throw new Error(`Symlink is not allowed in release source: ${name}`);
-    if (entry.name.startsWith('PRIVATE_') || (entry.name.startsWith('.env') && entry.name !== '.env.example')) throw new Error(`Private file in a public source directory: ${name}`);
+    if (entry.name.startsWith('PRIVATE_')
+        || (entry.name.startsWith('.env') && entry.name !== '.env.example')
+        || /^\.dev\.vars(?:\.|$)/.test(entry.name)
+        || /\.(?:pem|key|p12|pfx|sqlite3?|db)$/i.test(entry.name)
+        || ['.git', '.aws', '.ssh', 'node_modules', '.sites-runtime'].includes(entry.name)) throw new Error(`Private file in a public source directory: ${name}`);
     if (entry.isDirectory()) walk(name);
     else if (entry.isFile()) files.push(name);
   }

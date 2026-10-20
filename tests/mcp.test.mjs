@@ -6,6 +6,7 @@ import { compareOfficialQuotes, moneyToCents } from '../server/quote-comparison.
 import { handleMcpRequest, mcpStatus } from '../server/http-handler.mjs';
 
 const TEST_TOKEN = 'unit-test-only-not-a-credential';
+const TRUSTED_OWNER_ENV = { MCD_TRUST_SITES_IDENTITY: '1', MCD_OWNER_USER_ID: 'test-user' };
 const jsonResponse = (id, result, extra = {}) => new Response(JSON.stringify({ jsonrpc: '2.0', id, result }), { headers: { 'content-type': 'application/json', ...extra } });
 function fakeServer({ tools = [{ name: 'now-time-info', inputSchema: { type: 'object', additionalProperties: false } }], handle = undefined } = {}) {
   const requests = [];
@@ -198,12 +199,12 @@ test('API requires authentication for hosted account queries', async () => {
 });
 
 test('API rejects cross-origin request even if identity is present', async () => {
-  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user', Origin: 'https://evil.example' }));
+  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user', Origin: 'https://evil.example' }), TRUSTED_OWNER_ENV);
   assert.equal(res.status, 403);
 });
 
 test('API reports unconfigured token without claiming successful real access', async () => {
-  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user' }));
+  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user' }), TRUSTED_OWNER_ENV);
   assert.equal(res.status, 503);
   assert.equal((await res.json()).error.code, 'TOKEN_REQUIRED');
   const status = await mcpStatus({}).json();
@@ -213,14 +214,14 @@ test('API reports unconfigured token without claiming successful real access', a
 
 test('API validates JSON and request size and does not call MCP for invalid requests', async () => {
   const auth = { 'oai-authenticated-user-id': 'test-user' };
-  assert.equal((await handleMcpRequest(apiRequest('{invalid', auth))).status, 400);
-  assert.equal((await handleMcpRequest(apiRequest({ action: 'discover', value: 'x'.repeat(66000) }, auth))).status, 413);
-  assert.equal((await handleMcpRequest(apiRequest({ action: 'create-order' }, auth))).status, 400);
+  assert.equal((await handleMcpRequest(apiRequest('{invalid', auth), TRUSTED_OWNER_ENV)).status, 400);
+  assert.equal((await handleMcpRequest(apiRequest({ action: 'discover', value: 'x'.repeat(66000) }, auth), TRUSTED_OWNER_ENV)).status, 413);
+  assert.equal((await handleMcpRequest(apiRequest({ action: 'create-order' }, auth), TRUSTED_OWNER_ENV)).status, 400);
 });
 
 test('API discovery exposes only the allowlist and closes its session', async () => {
   const fixture = fakeServer({ tools: [{ name: 'now-time-info' }, { name: 'create-order' }] });
-  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user' }), { MCD_MCP_TOKEN: TEST_TOKEN }, () => fixture.client);
+  const res = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user' }), { ...TRUSTED_OWNER_ENV, MCD_MCP_TOKEN: TEST_TOKEN }, () => fixture.client);
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.deepEqual(body.tools.map(t => t.name), ['now-time-info']);
@@ -242,7 +243,7 @@ test('snapshot cannot show verified success when all business queries fail or ar
   for (const results of [[], [{ tool: 'now-time-info', error: { code: 'TIMEOUT' } }]]) {
     let closed = false;
     const client = { async snapshot() { return { source: 'live', results, skipped: [] }; }, async close() { closed = true; } };
-    const res = await handleMcpRequest(apiRequest({ action: 'snapshot' }, { 'oai-authenticated-user-id': 'test-user' }), {}, () => client);
+    const res = await handleMcpRequest(apiRequest({ action: 'snapshot' }, { 'oai-authenticated-user-id': 'test-user' }), TRUSTED_OWNER_ENV, () => client);
     assert.equal(res.status, 502);
     const body = await res.json();
     assert.equal(body.liveBusinessCallSucceeded, false);
@@ -254,9 +255,32 @@ test('snapshot cannot show verified success when all business queries fail or ar
 test('snapshot retains partial errors while reporting an actual successful business query', async () => {
   const results = [{ source: 'live', tool: 'now-time-info', result: { content: [{ type: 'text', text: '2026-10-20' }] } }, { tool: 'query-my-coupons', error: { code: 'TIMEOUT' } }];
   const client = { async snapshot() { return { source: 'live', results }; }, async close() {} };
-  const res = await handleMcpRequest(apiRequest({ action: 'snapshot' }, { 'oai-authenticated-user-id': 'test-user' }), {}, () => client);
+  const res = await handleMcpRequest(apiRequest({ action: 'snapshot' }, { 'oai-authenticated-user-id': 'test-user' }), TRUSTED_OWNER_ENV, () => client);
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.liveBusinessCallSucceeded, true);
   assert.equal(body.results[1].error.code, 'TIMEOUT');
+});
+
+test('a forged identity header cannot enable hosted access with default settings', async () => {
+  let created = false;
+  const response = await handleMcpRequest(
+    apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': 'test-user' }),
+    { MCD_MCP_TOKEN: TEST_TOKEN },
+    () => { created = true; throw new Error('Must not create an account client.'); },
+  );
+  assert.equal(response.status, 401);
+  assert.equal(created, false);
+});
+
+test('trusted hosting requires an explicit matching account owner', async () => {
+  for (const [user, env] of [
+    ['another-visitor', TRUSTED_OWNER_ENV],
+    ['test-user', { MCD_TRUST_SITES_IDENTITY: '1' }],
+    ['test-user', { MCD_OWNER_USER_ID: 'test-user' }],
+    ['test-user', { MCD_TRUST_SITES_IDENTITY: '1', MCD_OWNER_USER_ID: '   ' }],
+  ]) {
+    const response = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': user }), env, () => { throw new Error('Unauthorized client creation.'); });
+    assert.equal(response.status, 401);
+  }
 });

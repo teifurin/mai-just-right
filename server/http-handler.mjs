@@ -11,9 +11,14 @@ export async function handleMcpRequest(request, env = {}, clientFactory = option
   const url = new URL(request.url), origin = request.headers.get('origin');
   const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
   const local = loopback && env.MCD_ALLOW_LOCAL === '1';
-  // Hosted Sites supplies identity after authentication. A local development
-  // request cannot enable access by forging that header: explicit opt-in wins.
-  if ((loopback && !local) || (!local && !request.headers.get('oai-authenticated-user-id'))) return response({ error: { code: 'SIGN_IN_REQUIRED', message: '请登录私人应用；本地调试需显式设置 MCD_ALLOW_LOCAL=1。' } }, 401);
+  // Identity headers are only trusted behind the explicitly configured Sites
+  // gateway. A copied/self-hosted app must reject client-supplied identity
+  // headers by default, and a shared deployment must not expose the owner's
+  // McDonald's account to other signed-in visitors.
+  const owner = env.MCD_OWNER_USER_ID?.trim();
+  const hostedOwner = !loopback && env.MCD_TRUST_SITES_IDENTITY === '1'
+    && Boolean(owner) && request.headers.get('oai-authenticated-user-id') === owner;
+  if (!local && !hostedOwner) return response({ error: { code: 'SIGN_IN_REQUIRED', message: '当前请求无权访问账户数据。本地调试需显式设置 MCD_ALLOW_LOCAL=1；托管访问需配置可信身份来源与账户所有者。' } }, 401);
   if (origin && origin !== url.origin) return response({ error: { code: 'ORIGIN_REJECTED', message: '不接受跨站账户请求。' } }, 403);
   if (request.headers.get('sec-fetch-site') === 'cross-site') return response({ error: { code: 'ORIGIN_REJECTED', message: '不接受跨站账户请求。' } }, 403);
   if (!request.headers.get('content-type')?.includes('application/json')) return response({ error: { code: 'INVALID_CONTENT_TYPE', message: '请求必须是 JSON。' } }, 415);

@@ -1,8 +1,6 @@
 {
   "note": "公开证据：只含核价请求结构与官方应付金额，不含 Token、账户券、地址或订单。价格为 2026-10-20 当时快照，随门店、时段和账户变化。",
   "scope": {
-    "city": "深圳",
-    "area": "华强北",
     "channel": "到店自取 orderType=1 beType=1",
     "couponsApplied": false
   },
@@ -18,7 +16,7 @@
       "arguments": {
         "orderType": 1,
         "beType": 1,
-        "storeCode": "<深圳华强北门店，已省略>",
+        "storeCode": "<门店编码已省略>",
         "items": [
           {
             "productCode": "1440",
@@ -52,7 +50,7 @@
       "arguments": {
         "orderType": 1,
         "beType": 1,
-        "storeCode": "<深圳华强北门店，已省略>",
+        "storeCode": "<门店编码已省略>",
         "items": [
           {
             "productCode": "9900005456",
@@ -96,7 +94,7 @@
       "arguments": {
         "orderType": 1,
         "beType": 1,
-        "storeCode": "<深圳华强北门店，已省略>",
+        "storeCode": "<门店编码已省略>",
         "items": [
           {
             "productCode": "9900000891",

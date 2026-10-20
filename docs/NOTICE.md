@@ -14,9 +14,9 @@
 
 ## 第三方运行环境
 
-本项目基于提供的 React/Vinext Sites 脚手架继续开发，保留了构建、运行环境与 UI 基础设施。相关文件及依赖不因新增项目 LICENSE 而改变其原有权利和许可；不得将无法确认授权范围的脚手架内容一并声称为本项目原创。
+本项目基于 React/Vinext Sites 脚手架继续开发，保留实际使用的构建和运行基础设施。相关文件及依赖不因新增项目 LICENSE 而改变其原有权利和许可；其中 Sites 插件许可保留于 `build/sites-vite-plugin.LICENSE`。
 
-具体依赖和锁定版本见 `package.json` 与锁文件；其许可证以各自包内文件和上游仓库为准。`vendor/shadcn-tailwind-4.13.0.css` 的随附许可保留在 `vendor/shadcn-tailwind-4.13.0.LICENSE.md`。原始脚手架使用说明保留在 [STARTER_NOTES.md](STARTER_NOTES.md)。
+具体依赖和锁定版本见 `package.json` 与锁文件；其许可证以各自包内文件和上游仓库为准。`patches/` 中的安全修补适用于相应上游包，不改变上游包的许可证。
 
 ## 数据
 

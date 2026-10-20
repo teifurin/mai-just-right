@@ -83,7 +83,7 @@ npm run dev
 | `npm run build` | 构建应用 |
 | `npm start` | 在本地预览构建结果 |
 
-核心 `.mjs` 计算与 CLI 使用 Node.js 标准能力；Web 应用依赖由 `pnpm-lock.yaml` 固定。上述安装命令无需全局安装 pnpm，后续 `npm run` 仅用于启动脚本。原始运行环境说明保留在 [STARTER_NOTES.md](docs/STARTER_NOTES.md)，当前项目的启动步骤以本 README 为准。
+核心 `.mjs` 计算与 CLI 使用 Node.js 标准能力；Web 应用依赖和安全补丁由 `pnpm-lock.yaml` 固定。上述安装命令无需全局安装 pnpm，后续 `npm run` 仅用于启动脚本。
 
 CLI 也支持自然语言与结构化需求：
 
@@ -103,7 +103,7 @@ node scripts/mai-cli.mjs help
 
 配置模板见 [.env.example](.env.example) 和 [mcp-config.example.json](mcp-config.example.json)。模板中的变量由运行环境或 MCP 客户端的安全配置解析；不同客户端的变量注入方式可能不同。
 
-托管环境的真实 MCP API 必须经过身份验证。本地调试才可显式设置 `MCD_ALLOW_LOCAL=1`；不要在公开部署中启用该开关。详细的数据边界和接入流程见 [MCP_INTEGRATION.md](MCP_INTEGRATION.md)。
+真实 MCP API 默认拒绝托管账户访问。本地调试才可显式设置 `MCD_ALLOW_LOCAL=1`。在可信 Sites 网关后部署时，还必须设置 `MCD_TRUST_SITES_IDENTITY=1` 和 `MCD_OWNER_USER_ID`；只有指定所有者能访问该账户。独立服务器不要启用此身份信任开关。详细说明见 [安全与隐私](SECURITY.md) 和 [MCP 集成](MCP_INTEGRATION.md)。
 
 ### Agent Skill 安装
 
@@ -115,9 +115,9 @@ node scripts/mai-cli.mjs help
 
 ## 真实核价与验证
 
-- 演示模式可以独立运行；**56 项离线测试、TypeScript 和生产构建通过**。测试、真实调用和浏览器验证边界见 [VALIDATION.md](docs/VALIDATION.md)。
+- 演示模式可以独立运行；测试、真实调用和浏览器验证边界见 [VALIDATION.md](docs/VALIDATION.md)。安全配置和依赖补丁说明见 [SECURITY.md](SECURITY.md)。
 - **已使用个人 Token 完成真实账号联调（2026-10-20）**：工具发现、4 个只读业务工具、门店 / 菜单 / 套餐详情查询，以及一次“基准 + 两个候选”的官方 `calculate-price` 核价比较全部成功。脱敏证据见 [docs/evidence](docs/evidence/)。
-- 实测示例（深圳华强北一家门店，到店自取，未用券）：
+- 实测示例（同一指定门店，到店自取，未用券）：
 
   | 方案 | 官方核价 | 相对单点 | 多出餐品 |
   | --- | ---: | ---: | --- |
@@ -132,6 +132,7 @@ node scripts/mai-cli.mjs help
 - [架构与算法边界](docs/ARCHITECTURE.md)
 - [MCP 集成](MCP_INTEGRATION.md)
 - [测试与真实核价验证](docs/VALIDATION.md)
+- [安全与隐私](SECURITY.md)
 - [参赛声明](CONTEST_DECLARATION.md)
 - [许可与第三方说明](docs/NOTICE.md)
 

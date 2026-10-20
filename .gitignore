@@ -40,8 +40,6 @@ next-env.d.ts
 # Maintained Vite plugin and worker sources.
 !/build/
 /build/*
-!/build/connector-preview-plugin.mjs
-!/build/connector-preview-worker.mjs
 !/build/sites-vite-plugin.LICENSE
 !/build/sites-vite-plugin.ts
 !/build/sites-worker.ts
@@ -60,3 +58,12 @@ next-env.d.ts
 /evidence/
 /PRIVATE_*
 *.tsbuildinfo
+
+# Other local credentials and configuration must never enter a source release.
+/.aws/
+/.ssh/
+.dev.vars
+.dev.vars.*
+*.key
+*.p12
+*.pfx

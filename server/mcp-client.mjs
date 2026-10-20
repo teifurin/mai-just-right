@@ -133,7 +133,7 @@ export class McdClient {
 
   async initialize() {
     if (this.initialized) return this.serverInfo;
-    const result = await this.#post('initialize', { protocolVersion: SUPPORTED_PROTOCOLS[0], capabilities: {}, clientInfo: { name: 'mai-just-right', version: '1.0.0' } });
+    const result = await this.#post('initialize', { protocolVersion: SUPPORTED_PROTOCOLS[0], capabilities: {}, clientInfo: { name: 'mai-just-right', version: '1.0.1' } });
     if (!SUPPORTED_PROTOCOLS.includes(result.protocolVersion)) throw new McpError('UNSUPPORTED_PROTOCOL', '官方服务返回了当前客户端尚不支持的 MCP 协议版本。');
     this.protocolVersion = result.protocolVersion;
     this.serverInfo = result.serverInfo ?? {};
@@ -212,5 +212,5 @@ export class McdClient {
 /** Export evidence metadata, never account payloads, coupon IDs or credentials. */
 export function integrationEvidence(client, outcome) {
   const calls = client.audit.filter(row => row.method === 'tools/call');
-  return { application: 'mai-just-right', version: '1.0.0', source: 'live', endpoint: MCD_ENDPOINT, generatedAt: new Date().toISOString(), protocolVersion: client.protocolVersion, liveBusinessCallSucceeded: calls.some(row => row.ok), outcome, calls: client.audit.map(({ method, tool, ok, durationMs }) => ({ method, ...(tool ? { tool } : {}), ok, durationMs })), includesAccountData: false };
+  return { application: 'mai-just-right', version: '1.0.1', source: 'live', endpoint: MCD_ENDPOINT, generatedAt: new Date().toISOString(), protocolVersion: client.protocolVersion, liveBusinessCallSucceeded: calls.some(row => row.ok), outcome, calls: client.audit.map(({ method, tool, ok, durationMs }) => ({ method, ...(tool ? { tool } : {}), ok, durationMs })), includesAccountData: false };
 }

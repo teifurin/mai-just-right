@@ -19,7 +19,7 @@
 
 官方说明见 [M-China/mcd-mcp-server](https://github.com/M-China/mcd-mcp-server)。当前工具 Schema 以经过认证的 `tools/list` 返回为准。README 中的工具列表只能确认名称及用途，不能替代实际参数定义。
 
-`MCD_MCP_TOKEN` 仅在服务端读取，不出现在浏览器包、结果小票、localStorage 或提交材料中。托管 API 需要身份验证；`MCD_ALLOW_LOCAL=1` 只用于本地开发。服务返回 401 时检查凭证，429 时停止密集请求并稍后重试。官方标示每 Token 每分钟最多 600 次请求。
+`MCD_MCP_TOKEN` 仅在服务端读取，不出现在浏览器包、结果小票、localStorage 或提交材料中。`MCD_ALLOW_LOCAL=1` 只用于回环地址上的本地开发。托管账户访问默认关闭；只有在可信 Sites 网关后配置 `MCD_TRUST_SITES_IDENTITY=1` 和 `MCD_OWNER_USER_ID`，才接受该所有者的已认证身份。独立服务器不得直接信任客户端提供的身份请求头，具体边界见 [SECURITY.md](SECURITY.md)。服务返回 401 时检查访问配置或凭证，429 时停止密集请求并稍后重试。官方标示每 Token 每分钟最多 600 次请求。
 
 ## 工具与流程
 
@@ -102,7 +102,7 @@ Agent Skill 使用的是 MCP 客户端环境中用户自己的凭证；Web 服�
 | --- | --- | --- |
 | 初始化与工具发现 | `initialize` / `tools/list` | 成功；官方返回 35 个工具，其中 16 个在本项目只读允许列表内 |
 | 只读快照 | `now-time-info`、`query-my-coupons`、`available-coupons`、`campaign-calendar` | 4 个均成功（账户返回内容不公开） |
-| 门店 | `query-nearby-stores`（`beType=1, searchType=2`，城市 + 关键词） | 成功，取得深圳华强北门店 |
+| 门店 | `query-nearby-stores`（`beType=1, searchType=2`，城市 + 关键词） | 成功，取得所选门店；门店标识未公开 |
 | 菜单 | `query-meals`、`query-meal-detail` | 成功，取得单品、套餐编码及各 round 可选项 |
 | 核价比较 | `calculate-price` × 3（经 `mcp-quote`） | 成功：单点 ¥46.00；三件套 ¥33.50（少付 ¥12.50，无多余餐品）；四件套 ¥57.00（多付 ¥11.00，多一份麦乐鸡） |
 
