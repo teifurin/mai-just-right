@@ -306,3 +306,21 @@ test('inputs and frozen fixture data are never mutated by planning or parsing', 
   assert.equal(JSON.stringify(input), before);
   assert.equal(JSON.stringify({ catalog, demoOffers }), fixtureBefore);
 });
+
+test('official longer burger names recognize quantities without inventing generic choices', () => {
+  const parsed = parseIntent('两个麦辣鸡腿汉堡、一份板烧鸡腿汉堡');
+  assert.deepEqual(parsed.items, [{ productId: 'spicy-burger', quantity: 2 }, { productId: 'grilled-burger', quantity: 1 }]);
+  const unknown = parseIntent('两个汉堡');
+  assert.equal(unknown.items, undefined);
+  assert.match(unknown.note, /未识别|确认/);
+});
+
+ test('partial recognition explicitly flags generic products without guessing', () => {
+  const intent = parseIntent('两个人吃，要两个汉堡和一份薯条，预算60元');
+  assert.deepEqual(intent.unknownText, ['汉堡']);
+  assert.match(intent.note, /未确认餐品：汉堡/);
+  assert.equal(intent.items.length, 1);
+  assert.match(parseIntent('一杯饮料').note, /未确认餐品：饮料/);
+  assert.equal(parseIntent('两个麦辣鸡腿汉堡').unknownText, undefined);
+  assert.equal(parseIntent('不要饮料').unknownText, undefined);
+});

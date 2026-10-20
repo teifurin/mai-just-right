@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { McdClient, McpError, MCD_ENDPOINT, readRpcResponse, integrationEvidence } from '../server/mcp-client.mjs';
+import { McdClient, MCD_ENDPOINT, readRpcResponse, integrationEvidence } from '../server/mcp-client.mjs';
 import { validateArguments, assertPlainArguments } from '../server/schema.mjs';
 import { compareOfficialQuotes, moneyToCents } from '../server/quote-comparison.mjs';
 import { handleMcpRequest, mcpStatus } from '../server/http-handler.mjs';
@@ -126,7 +126,7 @@ test('server ping with same numeric ID receives a response while client keeps wa
   let answered = false;
   const { client, requests } = fakeServer({ handle: body => {
     if (!body.method && Object.hasOwn(body, 'result')) { assert.deepEqual(body.result, {}); answered = true; return new Response(null, { status: 202 }); }
-    if (body.method === 'tools/call') return new Response(`data: ${JSON.stringify({ jsonrpc: '2.0', id: body.id, method: 'ping' })}\n\ndata: ${JSON.stringify({ jsonrpc: '2.0', id: body.id, result: { content: [] } })}\n\n`, { headers: { 'content-type': 'text/event-stream' } });
+    if (body.method === 'tools/call') return new Response(`data: ${JSON.stringify({ jsonrpc: '2.0', id: body.id, method: 'ping' })}\n\ndata: ${JSON.stringify({ jsonrpc: '2.0', id: body.id, result: { content: [{ type: 'text', text: 'pong acknowledged' }] } })}\n\n`, { headers: { 'content-type': 'text/event-stream' } });
   } });
   const result = await client.callTool('now-time-info');
   assert.equal(result.source, 'live');
@@ -282,5 +282,56 @@ test('trusted hosting requires an explicit matching account owner', async () => 
   ]) {
     const response = await handleMcpRequest(apiRequest({ action: 'discover' }, { 'oai-authenticated-user-id': user }), env, () => { throw new Error('Unauthorized client creation.'); });
     assert.equal(response.status, 401);
+  }
+});
+
+
+test('empty tool payloads cannot establish business-call evidence', async () => {
+  for (const result of [{ content: [] }, { structuredContent: {} }, { content: [{ type: 'text', text: '  ' }] }, { structuredContent: {}, content: [{ type: 'text', text: '{}' }] }, { content: [{ type: 'text', text: '[]' }] }, { content: [{ type: 'text', text: 'null' }] }]) {
+    const { client } = fakeServer({ handle: body => body.method === 'tools/call' ? jsonResponse(body.id, result) : undefined });
+    await assert.rejects(() => client.callTool('now-time-info'), { code: 'INVALID_TOOL_RESULT' });
+    assert.equal(integrationEvidence(client, 'failed').liveBusinessCallSucceeded, false);
+  }
+});
+
+test('explicit HTTP-style business failure codes do not leak details or establish success', async () => {
+  for (const code of [400, 401, 403, 429, 500, 503]) {
+    const result = { structuredContent: { code, message: TEST_TOKEN, data: null } };
+    const { client } = fakeServer({ handle: body => body.method === 'tools/call' ? jsonResponse(body.id, result) : undefined });
+    await assert.rejects(() => client.callTool('now-time-info'), error => error.code === 'TOOL_ERROR' && !error.message.includes(TEST_TOKEN));
+    assert.equal(integrationEvidence(client, 'failed').liveBusinessCallSucceeded, false);
+  }
+});
+
+test('expired business session rediscovers changed schema before retrying arguments', async () => {
+  let generations = 0;
+  const { client, requests } = fakeServer({ handle: body => {
+    if (body.method === 'initialize') generations++;
+    if (body.method === 'tools/list') return jsonResponse(body.id, { tools: [{ name: 'calculate-price', inputSchema: { type: 'object', required: [generations === 1 ? 'oldField' : 'newField'] } }] });
+    if (body.method === 'tools/call') return new Response(null, { status: 404 });
+  } });
+  await assert.rejects(() => client.callTool('calculate-price', { oldField: 'fixture' }), { code: 'SCHEMA_MISMATCH' });
+  assert.equal(requests.filter(r => JSON.parse(r.body).method === 'tools/list').length, 2);
+  assert.equal(requests.filter(r => JSON.parse(r.body).method === 'tools/call').length, 1);
+  assert.equal(integrationEvidence(client, 'failed').liveBusinessCallSucceeded, false);
+});
+
+test('repeated business session expiry stops after one fresh validation and retry', async () => {
+  const { client, requests } = fakeServer({ handle: body => body.method === 'tools/call' ? new Response(null, { status: 404 }) : undefined });
+  await assert.rejects(() => client.callTool('now-time-info'), { code: 'SESSION_EXPIRED' });
+  assert.equal(requests.filter(r => JSON.parse(r.body).method === 'initialize').length, 2);
+  assert.equal(requests.filter(r => JSON.parse(r.body).method === 'tools/list').length, 2);
+  assert.equal(requests.filter(r => JSON.parse(r.body).method === 'tools/call').length, 2);
+  assert.equal(integrationEvidence(client, 'failed').liveBusinessCallSucceeded, false);
+});
+
+
+test('contradictory success flags and numeric-string failure codes fail closed', async () => {
+  for (const payload of [{ success: true, code: 403, message: TEST_TOKEN }, { code: '403', message: TEST_TOKEN }, { success: true, code: '503', message: TEST_TOKEN }]) {
+    for (const result of [{ structuredContent: payload }, { content: [{ type: 'text', text: JSON.stringify(payload) }] }]) {
+      const { client } = fakeServer({ handle: body => body.method === 'tools/call' ? jsonResponse(body.id, result) : undefined });
+      await assert.rejects(() => client.callTool('now-time-info'), error => error.code === 'TOOL_ERROR' && !error.message.includes(TEST_TOKEN));
+      assert.equal(integrationEvidence(client, 'failed').liveBusinessCallSucceeded, false);
+    }
   }
 });

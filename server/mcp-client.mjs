@@ -124,7 +124,7 @@ export class McdClient {
   async rpc(method, params) {
     try { return await this.#post(method, params); }
     catch (error) {
-      if (error.code !== 'SESSION_EXPIRED' || method === 'initialize') throw error;
+      if (error.code !== 'SESSION_EXPIRED' || method === 'initialize' || method === 'tools/call') throw error;
       this.initialized = false; this.sessionId = undefined; this.tools = null;
       await this.initialize();
       return this.#post(method, params);
@@ -160,16 +160,39 @@ export class McdClient {
   }
 
   async callTool(name, args = {}) {
+    return this.#callTool(name, args, true);
+  }
+
+  async #callTool(name, args, canRetry) {
     if (!SAFE_NAMES.has(name)) throw new McpError('TOOL_NOT_ALLOWED', '本项目仅开放查询与核价工具，不执行领券、下单、积分兑换或抽奖。', 403);
     try { assertPlainArguments(args); } catch (error) { throw new McpError('INVALID_ARGUMENTS', error.message, 400); }
     const tool = (await this.listTools()).find(t => t.name === name);
     if (!tool) throw new McpError('TOOL_UNAVAILABLE', '当前官方服务未提供这个工具。', 400);
     const errors = validateArguments(args, tool.inputSchema);
     if (errors.length) throw new McpError('SCHEMA_MISMATCH', '参数不符合官方实时 Schema。', 400, errors);
-    const result = await this.rpc('tools/call', { name, arguments: args });
+    let result;
+    try { result = await this.rpc('tools/call', { name, arguments: args }); }
+    catch (error) {
+      if (error.code !== 'SESSION_EXPIRED' || !canRetry) throw error;
+      // A new session may publish a different schema or remove a tool. Never
+      // resend the old call before fresh discovery and argument validation.
+      this.initialized = false; this.sessionId = undefined; this.tools = null;
+      return this.#callTool(name, args, false);
+    }
     const structured = result?.structuredContent;
-    const validContent = Array.isArray(result?.content) && result.content.every(item => item && typeof item === 'object' && typeof item.type === 'string');
-    const validStructured = structured !== null && typeof structured === 'object' && !Array.isArray(structured);
+    const meaningfulText = text => {
+      if (typeof text !== 'string' || !text.trim()) return false;
+      try {
+        const parsed = JSON.parse(text);
+        return parsed !== null && (typeof parsed !== 'object' || Object.keys(parsed).length > 0);
+      } catch { return true; } // Nonempty plain text is permitted MCP content.
+    };
+    const validContent = Array.isArray(result?.content) && result.content.length > 0
+      && result.content.every(item => item && typeof item === 'object' && typeof item.type === 'string')
+      && result.content.some(item => item.type === 'text'
+        ? meaningfulText(item.text)
+        : Object.keys(item).some(key => key !== 'type'));
+    const validStructured = structured !== null && typeof structured === 'object' && !Array.isArray(structured) && Object.keys(structured).length > 0;
     if (!result || typeof result !== 'object' || Array.isArray(result) || (!validContent && !validStructured)) {
       this.audit[this.audit.length - 1].ok = false;
       throw new McpError('INVALID_TOOL_RESULT', '官方工具没有返回有效的业务结果，不能记为真实调用成功。', 502);
@@ -182,7 +205,11 @@ export class McdClient {
         try { businessPayloads.push(JSON.parse(part.text)); } catch { /* Plain text is valid MCP content. */ }
       }
     }
-    const businessFailed = businessPayloads.some(payload => payload && typeof payload === 'object' && !Array.isArray(payload) && payload.success === false);
+    const businessFailed = businessPayloads.some(payload => payload && typeof payload === 'object' && !Array.isArray(payload) && (payload.success === false
+      // The service uses HTTP-style business codes. Only reject explicit
+      // failure codes here; do not invent success semantics for unknown codes.
+      || ((Number.isInteger(payload.code) || (typeof payload.code === 'string' && /^[45]\d{2}$/.test(payload.code)))
+        && Number(payload.code) >= 400 && Number(payload.code) <= 599 && typeof payload.message === 'string')));
     if (result?.isError || businessFailed) { this.audit[this.audit.length - 1].ok = false; throw new McpError('TOOL_ERROR', '官方工具未成功处理请求，请核对门店、券和参数后重试。', 422); }
     return { source: 'live', tool: name, fetchedAt: new Date().toISOString(), result };
   }

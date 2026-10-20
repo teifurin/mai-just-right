@@ -1,5 +1,6 @@
 import { McdClient, McpError, MCD_ENDPOINT, READ_ONLY_TOOLS } from './mcp-client.mjs';
 import { compareOfficialQuotes } from './quote-comparison.mjs';
+import { loadPickupProfile, pickupStores, pickupCatalog, pickupRecommend } from './pickup-flow.mjs';
 
 const response = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Vary': 'Origin' } });
 export function mcpStatus(env = {}) {
@@ -35,8 +36,14 @@ export async function handleMcpRequest(request, env = {}, clientFactory = option
     let body;
     try { body = JSON.parse(raw); } catch { throw new McpError('INVALID_JSON', 'JSON 格式不正确。', 400); }
     if (!body || typeof body !== 'object' || Array.isArray(body)) throw new McpError('INVALID_REQUEST', '请求必须是对象。', 400);
-    if (!['discover', 'snapshot', 'call', 'compare'].includes(body.action)) throw new McpError('INVALID_ACTION', '未知操作。', 400);
+    if (!['discover', 'snapshot', 'call', 'compare', 'pickup-stores', 'pickup-catalog', 'pickup-recommend'].includes(body.action)) throw new McpError('INVALID_ACTION', '未知操作。', 400);
     client = clientFactory({ token: env.MCD_MCP_TOKEN });
+    if (body.action.startsWith('pickup-')) {
+      const profile = loadPickupProfile(env);
+      if (body.action === 'pickup-stores') return response(await pickupStores(client, profile, body.search));
+      if (body.action === 'pickup-catalog') return response(await pickupCatalog(client, profile, body.storeId));
+      return response(await pickupRecommend(client, profile, body));
+    }
     if (body.action === 'discover') {
       const tools = await client.listTools();
       return response({ source: 'live', endpoint: MCD_ENDPOINT, connected: true, protocolVersion: client.protocolVersion, serverInfo: client.serverInfo, tools: tools.filter(t => t.readOnlyAllowed), hiddenWriteTools: tools.filter(t => !t.readOnlyAllowed).length, audit: client.audit });

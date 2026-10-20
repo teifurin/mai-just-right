@@ -390,8 +390,8 @@ function numberFromText(value) {
 
 const NUMBER_TEXT = '(?:\\d+(?:\\.\\d+)?|[零〇一二两三四五六七八九十百千点]+)';
 const ALIASES = [
-  ['spicy-burger', ['麦辣鸡腿堡', '麦辣鸡堡', '麦辣堡', '辣堡']],
-  ['grilled-burger', ['板烧鸡腿堡', '板烧鸡堡', '板烧堡', '板烧']],
+  ['spicy-burger', ['麦辣鸡腿汉堡', '麦辣鸡腿堡', '麦辣鸡堡', '麦辣堡', '辣堡']],
+  ['grilled-burger', ['板烧鸡腿汉堡', '板烧鸡腿堡', '板烧鸡堡', '板烧堡', '板烧']],
   ['big-mac', ['巨无霸']],
   ['nuggets', ['麦乐鸡（5块）', '麦乐鸡(5块)', '麦乐鸡', '鸡块']],
   ['fries', ['中薯条', '中薯', '薯条']],
@@ -443,6 +443,14 @@ export function parseIntent(text) {
     for (const match of source.matchAll(pattern)) matches.push({ productId, start: match.index, end: match.index + match[0].length });
   }
   matches.sort((a, b) => a.start - b.start || b.end - a.end);
+  // Generic categories cannot safely choose a specific product or disappear from a partial match.
+  const ambiguous = [...source.matchAll(/汉堡|饮料/g)].filter(match =>
+    !matches.some(known => match.index >= known.start && match.index + match[0].length <= known.end)
+    && !/(?:不要|不喝)$/.test(source.slice(0, match.index)));
+  if (ambiguous.length) {
+    output.unknownText = [...new Set(ambiguous.map(match => match[0]))];
+    notes.push(`未确认餐品：${output.unknownText.join('、')}，请手动选择具体商品，未自动代选。`);
+  }
   let invalidQuantity = false;
   for (const match of matches) {
     const before = source.slice(0, match.start);
@@ -474,7 +482,7 @@ export function parseIntent(text) {
   output.recognized = recognized;
   output.note = recognized.length
     ? `规则识别：${recognized.join('；')}。${notes.join('')}请确认下方选项后再计算。`
-    : '暂未识别出明确需求。可以试试“一个人，预算35元，一个麦辣鸡腿堡、一份薯条和一杯可乐，自取，不凑单”。';
+    : `${notes.join('')}暂未识别出明确需求。可以试试“一个人，预算35元，一个麦辣鸡腿堡、一份薯条和一杯可乐，自取，不凑单”。`;
   return output;
 }
 
