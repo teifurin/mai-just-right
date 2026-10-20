@@ -11,7 +11,7 @@
 3. 核对公开仓库可访问，含 `README.md`、原样 `CONTEST_DECLARATION.md`、`MCP_INTEGRATION.md`、`mcp-config.example.json` 及源码。
 4. 经参赛者授权后，使用下文向官方比赛仓库提交 Issue，再核对自动审核结果；不能把公开发布等同于已报名。
 
-**报名截止为北京时间 2026 年 10 月 25 日 23:59，东京时间 10 月 26 日 00:59。** 排名按公开 Star 数量计算；不使用刷榜或虚构调用记录的方式补足条件。完整时间与规则来源见 [SOURCES.md](SOURCES.md)。
+**报名截止为北京时间 2026 年 10 月 25 日 23:59，东京时间 10 月 26 日 00:59。** 排名按公开 Star 数量计算。完整时间与要求以[官方活动规则](https://github.com/M-China/mcd-developer-innovation-challenge/blob/main/activityGuidelines.md)为准。
 
 ## Issue 标题
 

@@ -1,3 +1,5 @@
+![麦麦刚刚好：按需选餐、优惠比较与清楚分账](docs/images/mai-just-right-banner.png)
+
 # 麦麦刚刚好 · Mai Just Right
 
 **先决定想吃什么，再计算怎么买：把套餐、优惠与预算放在同一张清楚的账单上。**
@@ -13,7 +15,7 @@
 - 需要一起点餐、核对总价并分摊金额的小组。
 - 希望通过 MCP 客户端读取官方信息、逐项核价的开发者与 Agent 用户。
 
-## 已提供的完整体验
+## 主要功能
 
 | 功能 | 行为 |
 | --- | --- |
@@ -88,7 +90,7 @@ node scripts/mai-cli.mjs help
 
 > 两个人吃。我想要一个汉堡和一杯饮料，同伴想要鸡块，预算 60 元。先只买这些；如果有更省的套餐，请把多出来的餐品和实际多付或少付的钱讲清楚。拿不到实时价格就明确告诉我。
 
-## 当前验证与交付状态
+## 真实核价与验证
 
 - 演示模式可以独立运行；**56 项离线测试、TypeScript 和生产构建通过**。测试、真实调用和浏览器验证边界见 [VALIDATION.md](docs/VALIDATION.md)。
 - **已使用个人 Token 完成真实账号联调（2026-10-20）**：工具发现、4 个只读业务工具、门店 / 菜单 / 套餐详情查询，以及一次“基准 + 两个候选”的官方 `calculate-price` 核价比较全部成功。脱敏证据见 [docs/evidence](docs/evidence/)。
@@ -101,14 +103,13 @@ node scripts/mai-cli.mjs help
   | 麦辣鸡腿堡四件套 | ¥57.00 | 多付 ¥11.00 | 麦乐鸡 4 块 |
 
   四件套在菜单列表中显示 ¥28（带“麦金卡”标签），但本账户的官方核价为 ¥57.00。列表价不等于应付金额，这正是本项目坚持以官方核价为准的原因。价格是当时快照，会随门店、时段和账户变化。
-- 开源项目地址：[teifurin/mai-just-right](https://github.com/teifurin/mai-just-right)。报名 Issue 尚未提交，待参赛者确认资格与声明。可直接使用的报名正文见 [SUBMISSION.md](docs/SUBMISSION.md)。
 
-## 文档
+## 开发文档
 
-- [90 秒演示讲稿](docs/DEMO_SCRIPT.md)
 - [架构与算法边界](docs/ARCHITECTURE.md)
 - [MCP 集成](MCP_INTEGRATION.md)
-- [官方来源与核验日期](docs/SOURCES.md)
+- [测试与真实核价验证](docs/VALIDATION.md)
+- [参赛声明](CONTEST_DECLARATION.md)
 - [许可与第三方说明](docs/NOTICE.md)
 
 原创项目代码采用 [MIT License](LICENSE)。官方参赛声明按原文件保留，第三方组件、脚手架和相关商标的权利不因本项目许可而改变。

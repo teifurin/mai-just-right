@@ -10,7 +10,7 @@
 
 “麦当劳”“McDonald's”及相关商标的权利属于各自权利人。本项目名称、说明和接口集成不代表官方出品、认证或背书。官方 MCP 示例及文档的使用受其原有条款约束；本项目许可不扩大其授权范围。
 
-官方文件来源及本次核验日期见 [SOURCES.md](SOURCES.md)。
+声明原文见[官方比赛仓库](https://github.com/M-China/mcd-developer-innovation-challenge/blob/main/CONTEST_DECLARATION.md)；MCP 服务说明见[官方接入指南](https://github.com/M-China/mcd-mcp-server)。
 
 ## 第三方运行环境
 
