@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T07:31:26.804Z",
+  "generatedAt": "2026-10-20T07:40:06.293Z",
   "includesCredentials": false,
   "knownSecretValuesChecked": 1,
   "files": [
@@ -45,8 +45,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "71ba0646b26cf8e2eedbd1efe7ddacaf03dd8b0d46853eacb62b90c5d0a35505",
-      "bytes": 7788
+      "sha256": "3616e5559a703d9060931409e0d1a6db520da592ef73f2b830e7ed3ffd2c2fcb",
+      "bytes": 8587
     },
     {
       "path": "app/api/mcp/route.ts",
@@ -465,8 +465,8 @@
     },
     {
       "path": "docs/VALIDATION.md",
-      "sha256": "52a9d2a8f23c328674f788c7a4c81cc1250b3dc4ed67602eb96a64070d30e9c7",
-      "bytes": 5901
+      "sha256": "4976be4b7f64c916c533eb14cddce58e757a44f46d80fe195cd17dbd1f5ab3b5",
+      "bytes": 6057
     },
     {
       "path": "docs/evidence/live-verification-2026-10-20.json",
@@ -497,6 +497,26 @@
       "path": "docs/images/mai-just-right-banner.png",
       "sha256": "b4f9223d2567272f48f2ef430433fdf221c52a3fe3e8f7592cce3212f1685f11",
       "bytes": 1917244
+    },
+    {
+      "path": "docs/images/ui-coupons.png",
+      "sha256": "c4feaf7b5e9603f4da0ea06fefc6e9c34ac6bc17cad68bc6d835db3090bc9e74",
+      "bytes": 107136
+    },
+    {
+      "path": "docs/images/ui-home.png",
+      "sha256": "1d51af92d6b679e83e4faa8d0284e8fa8ed7f4ce32744b0ac49f5864ad828aa1",
+      "bytes": 187519
+    },
+    {
+      "path": "docs/images/ui-plan-and-receipt.png",
+      "sha256": "87d6c0b26265dcb5c26142ffb2f25fcaef50a58934b52115ff9314450b8bfa85",
+      "bytes": 111080
+    },
+    {
+      "path": "docs/images/ui-weighted-split.png",
+      "sha256": "c8b45458573ea1068a482ea2f7079ca5818e57d33d68f639cc53559ba865e1b5",
+      "bytes": 13036
     },
     {
       "path": "drizzle.config.ts",
