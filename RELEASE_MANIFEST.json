@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T07:14:36.590Z",
+  "generatedAt": "2026-10-20T07:23:04.579Z",
   "includesCredentials": false,
   "knownSecretValuesChecked": 1,
   "files": [
@@ -45,8 +45,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "5048106b4aebc28ccb77b9c1117a7b91083c96ea8aa4257ceadf28a394431a52",
-      "bytes": 8087
+      "sha256": "b0688ec98825048f738fdd6b6540290f48cc3ec1816df69f466a27bc0f2e48ae",
+      "bytes": 7928
     },
     {
       "path": "app/api/mcp/route.ts",
@@ -470,8 +470,8 @@
     },
     {
       "path": "docs/SUBMISSION.md",
-      "sha256": "9712eb9845bb6e7ff60546584d6e831bcd57fbf189984db34d78a26b4ec368a7",
-      "bytes": 2709
+      "sha256": "7c24352393672b8b62445920a291fe52a28b011961adbb8ef39aac9ccb5709d3",
+      "bytes": 2613
     },
     {
       "path": "docs/VALIDATION.md",

@@ -101,7 +101,6 @@ node scripts/mai-cli.mjs help
   | 麦辣鸡腿堡四件套 | ¥57.00 | 多付 ¥11.00 | 麦乐鸡 4 块 |
 
   四件套在菜单列表中显示 ¥28（带“麦金卡”标签），但本账户的官方核价为 ¥57.00。列表价不等于应付金额，这正是本项目坚持以官方核价为准的原因。价格是当时快照，会随门店、时段和账户变化。
-- [项目预览](https://mai-just-right.jk-fam-6213.chatgpt.site)是**项目所有者的私有审阅地址**，不替代比赛所需的公开 GitHub 仓库。
 - 开源项目地址：[teifurin/mai-just-right](https://github.com/teifurin/mai-just-right)。报名 Issue 尚未提交，待参赛者确认资格与声明。可直接使用的报名正文见 [SUBMISSION.md](docs/SUBMISSION.md)。
 
 ## 文档
